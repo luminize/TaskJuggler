@@ -366,18 +366,18 @@ class TaskJuggler
           # other languages as well.
           units = []
           if str == "1"
-            units = %w( minute hour day week month quarter year )
+            units = %w( second minute hour day week month quarter year )
           else
-            units = %w( minutes hours days weeks months quarters years )
+            units = %w( seconds minutes hours days weeks months quarters years )
           end
           str += ' ' + units[shortest]
         else
-          str += %w( min h d w m q y )[shortest]
+          str += %w( sec min h d w m q y )[shortest]
         end
       else
         # For fixed units we just need to do the conversion. No unit is
         # included.
-        units = [ :minutes, :hours, :days, :weeks, :months, :quarters, :years ]
+        units = [ :seconds, :minutes, :hours, :days, :weeks, :months, :quarters, :years ]
         str = @numberFormat.format(value * factors[units.index(@loadUnit)])
       end
       str

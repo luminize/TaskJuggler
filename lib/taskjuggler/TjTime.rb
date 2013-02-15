@@ -191,13 +191,24 @@ class TaskJuggler
       end
     end
 
+    # Normalize time to the beginning of the current second.
+    def beginOfSecond
+      sec, min, hour, day, month, year = localtime.to_a
+#     sec = min = 0
+      TjTime.new([ year, month, day, hour, min, sec, 0 ])
+    end
+    # Normalize time to the beginning of the current minute.
+    def beginOfMinute
+      sec, min, hour, day, month, year = localtime.to_a
+      sec = 0
+      TjTime.new([ year, month, day, hour, min, sec, 0 ])
+    end
     # Normalize time to the beginning of the current hour.
     def beginOfHour
       sec, min, hour, day, month, year = localtime.to_a
       sec = min = 0
       TjTime.new([ year, month, day, hour, min, sec, 0 ])
     end
-
     # Normalize time to the beginning of the current day.
     def midnight
       sec, min, hour, day, month, year = localtime.to_a
@@ -245,9 +256,29 @@ class TaskJuggler
       TjTime.new([ year, month, day, hour, min, sec, 0 ])
     end
 
+    # Return a new time that is _seconds_ later than time.
+    def secondsLater(second)
+      TjTime.new(@time + second)
+    end
+
+    # Return a new time that is _minutes_ later than time.
+    def minutesLater(minutes)
+      TjTime.new(@time + minutes * 60)
+    end
+
     # Return a new time that is _hours_ later than time.
     def hoursLater(hours)
       TjTime.new(@time + hours * 3600)
+    end
+
+    # Return a new time that is 1 second later than time.
+    def sameTimeNextSecond
+      secondsLater(1)
+    end
+
+    # Return a new time that is 1 minute later than time.
+    def sameTimeNextMinute
+      minutesLater(1)
     end
 
     # Return a new time that is 1 hour later than time.
@@ -328,8 +359,25 @@ class TaskJuggler
       d
     end
 
+    # Return the number of seconds between this time and _date_. The result is
+    # NOT rounded up.
+
+    def secondsTo(date)
+      t1, t2 = order(date)
+      (t2 - t1).ceil
+    end
+
+    # Return the number of minutes between this time and _date_. The result is
+    # always rounded up.
+
+    def minutesTo(date)
+      t1, t2 = order(date)
+      ((t2 - t1) / 60).ceil
+    end
+
     # Return the number of hours between this time and _date_. The result is
     # always rounded up.
+
     def hoursTo(date)
       t1, t2 = order(date)
       ((t2 - t1) / 3600).ceil

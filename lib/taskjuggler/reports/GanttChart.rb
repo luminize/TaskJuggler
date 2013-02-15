@@ -60,6 +60,10 @@ class TaskJuggler
       # defines the minimum required length of an time-off interval that is
       # displayed in this scale.
       @@scales = [
+        { 'name' => 'second', 'stepSize' => 20, 'stepsToFunc' => :secondsTo,
+          'minTimeOff' => 3 },
+        { 'name' => 'minute', 'stepSize' => 20, 'stepsToFunc' => :minutesTo,
+          'minTimeOff' => 3 },        
         { 'name' => 'hour', 'stepSize' => 20, 'stepsToFunc' => :hoursTo,
           'minTimeOff' => 5 * 60 },
         { 'name' => 'day', 'stepSize' => 20, 'stepsToFunc' => :daysTo,

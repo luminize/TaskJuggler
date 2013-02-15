@@ -570,7 +570,8 @@ EOT
 
   def rule_calendarDuration
     pattern(%w( !number !durationUnit ), lambda {
-      convFactors = [ 60.0, # minutes
+      convFactors = [ 1, #seconds
+                      60.0, # minutes
                       60.0 * 60, # hours
                       60.0 * 60 * 24, # days
                       60.0 * 60 * 24 * 7, # weeks
@@ -661,6 +662,13 @@ EOT
   end
 
   def rule_chartScale
+
+    singlePattern('_second')
+    descr('Set chart resolution to 1 second.')   
+
+    singlePattern('_minute')
+    descr('Set chart resolution to 1 minute.')
+    
     singlePattern('_hour')
     descr('Set chart resolution to 1 hour.')
 
@@ -923,7 +931,7 @@ EOT
       if @val[0] % resolution != 0
         error('misaligned_date',
               "The date must be aligned to the timing resolution (" +
-              "#{resolution / 60} min) of the project.",
+              "#{resolution / 3600} sec) of the project.",
               @sourceFileInfo[0])
       end
       @val[0]
@@ -1002,37 +1010,45 @@ EOT
   end
 
   def rule_durationUnit
-    pattern(%w( _min ), lambda { 0 })
+    pattern(%w( _sec ), lambda { 0 })
+    descr('seconds')
+
+    pattern(%w( _min ), lambda { 1 })
     descr('minutes')
 
-    pattern(%w( _h ), lambda { 1 })
+    pattern(%w( _h ), lambda { 2 })
     descr('hours')
 
-    pattern(%w( _d ), lambda { 2 })
+    pattern(%w( _d ), lambda { 3 })
     descr('days')
 
-    pattern(%w( _w ), lambda { 3 })
+    pattern(%w( _w ), lambda { 4 })
     descr('weeks')
 
-    pattern(%w( _m ), lambda { 4 })
+    pattern(%w( _m ), lambda { 5 })
     descr('months')
 
-    pattern(%w( _y ), lambda { 5 })
+    pattern(%w( _y ), lambda { 6 })
     descr('years')
   end
 
   def rule_durationUnitOrPercent
+    pattern(%w( _sec ), lambda { 0 })
+    descr('seconds')
+
     pattern(%w( _% ), lambda { -1 })
     descr('percentage of reported period')
 
-    pattern(%w( _min ), lambda { 0 })
+    pattern(%w( _min ), lambda { 1 })
     descr('minutes')
 
-    pattern(%w( _h ), lambda { 1 })
+    pattern(%w( _h ), lambda { 2 })
     descr('hours')
 
-    pattern(%w( _d ), lambda { 2 })
+    pattern(%w( _d ), lambda { 3 })
     descr('days')
+
+ 
   end
 
   def rule_export
@@ -2002,7 +2018,8 @@ EOT
 
   def rule_intervalDuration
     pattern(%w( !number !durationUnit ), lambda {
-      convFactors = [ 60, # minutes
+      convFactors = [ 1, #seconds
+                      60, # minutes
                       60 * 60, # hours
                       60 * 60 * 24, # days
                       60 * 60 * 24 * 7, # weeks
@@ -2552,6 +2569,13 @@ EOT
   end
 
   def rule_loadunitName
+
+    pattern([ '_seconds' ], lambda { :seconds })
+    descr('Display all load and duration values as seconds.')
+
+    pattern([ '_minutes' ], lambda { :minutes })
+    descr('Display all load and duration values as minutes.')
+
     pattern([ '_days' ], lambda { :days })
     descr('Display all load and duration values as days.')
 
@@ -2565,9 +2589,6 @@ value. The unit name will not be abbreviated. It will not use quarters since
 it is not common.
 EOT
          )
-
-    pattern([ '_minutes' ], lambda { :minutes })
-    descr('Display all load and duration values as minutes.')
 
     pattern([ '_months' ], lambda { :months })
     descr('Display all load and duration values as months.')
@@ -2588,6 +2609,7 @@ EOT
 
     pattern([ '_years' ], lambda { :years })
     descr('Display all load and duration values as years.')
+
   end
 
   def rule_logicalExpression
@@ -3246,20 +3268,20 @@ EOT
       @val[0]
     })
 
-    pattern(%w( _timingresolution $INTEGER _min ), lambda {
-      goodValues = [ 5, 10, 15, 20, 30, 60 ]
+    pattern(%w( _timingresolution $INTEGER _sec ), lambda {
+      goodValues = [ 1, 10, 20, 30, 60, 300, 600, 1800, 3600 ]
       unless goodValues.include?(@val[1])
         error('bad_timing_res',
-              "Timing resolution must be one of #{goodValues.join(', ')} min.",
+              "Timing resolution must be one of #{goodValues.join(', ')} sec. it is #{@val[1]}",
               @sourceFileInfo[1])
       end
-      if @val[1] > (Project.maxScheduleGranularity / 60)
+      if (@val[1] / 60) > (Project.maxScheduleGranularity / 60)
         error('too_large_timing_res',
               'The maximum allowed timing resolution for the timezone is ' +
-              "#{Project.maxScheduleGranularity / 60} minutes.",
+              "#{Project.maxScheduleGranularity / 60} minutes. It is now #{@val[1]}",
               @sourceFileInfo[1])
       end
-      @project['scheduleGranularity'] = @val[1] * 60
+      @project['scheduleGranularity'] = @val[1] #* 60
     })
     doc('timingresolution', <<'EOT'
 Sets the minimum timing resolution. The smaller the value, the longer the
@@ -3724,8 +3746,8 @@ EOT
     singlePattern('_alerttrend')
     descr(<<'EOT'
 Shows how the alert level at the end of the report period compares to the
-alert level at the begining of the report period. Possible values are up, down
-or flat.
+alert level at the begining of the report period. Possible values are
+''''Up'''', ''''Down'''' or ''''Flat''''.
 EOT
          )
 
@@ -3901,6 +3923,12 @@ EOT
     level(:deprecated)
     also('bsi')
     descr('Deprecated alias for bsi')
+
+    singlePattern('_secondly')
+    descr('A group of columns with one column for each second')
+
+    singlePattern('_minutely')
+    descr('A group of columns with one column for each minute')
 
     singlePattern('_hourly')
     descr('A group of columns with one column for each hour')
@@ -6503,7 +6531,7 @@ higher priority. This can result in situations where high priority tasks do
 not get their resources even though the parallel competing tasks have a much
 lower priority.
 
-ALAP tasks may not have [[bookings.task|bookings]] since the first booked slot
+ALAP tasks may not have [[booking.task|bookings]] since the first booked slot
 determines the start date of the task and prevents it from being scheduled
 from end to start.
 
@@ -7403,15 +7431,13 @@ EOT
 
   def rule_workingDuration
     pattern(%w( !number !durationUnit ), lambda {
-      convFactors = [ 60, # minutes
+      convFactors = [ 1, # seconds
+                      60, # minutes
                       60 * 60, # hours
                       60 * 60 * @project['dailyworkinghours'], # days
-                      60 * 60 * @project['dailyworkinghours'] *
-                      (@project.weeklyWorkingDays), # weeks
-                      60 * 60 * @project['dailyworkinghours'] *
-                      (@project['yearlyworkingdays'] / 12), # months
-                      60 * 60 * @project['dailyworkinghours'] *
-                      @project['yearlyworkingdays'] # years
+                      60 * 60 * @project['dailyworkinghours'] * (@project.weeklyWorkingDays), # weeks
+                      60 * 60 * @project['dailyworkinghours'] * (@project['yearlyworkingdays'] / 12), # months
+                      60 * 60 * @project['dailyworkinghours'] * @project['yearlyworkingdays'] # years
                     ]
       # The result will always be in number of time slots.
       (@val[0] * convFactors[@val[1]] /
@@ -7424,7 +7450,8 @@ EOT
     pattern(%w( !number !durationUnitOrPercent ), lambda {
       if @val[1] >= 0
         # Absolute value in minutes, hours or days.
-        convFactors = [ 60, # minutes
+        convFactors = [ #1, #seconds
+          60, # minutes
           60 * 60, # hours
           60 * 60 * @project['dailyworkinghours'] # days
         ]

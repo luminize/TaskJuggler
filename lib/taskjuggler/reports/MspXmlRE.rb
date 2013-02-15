@@ -106,15 +106,16 @@ EOT
       p << XMLNamedText.new(@project['now'].to_s(@timeformat), 'CurrentDate')
       p << XMLNamedText.new(@project['now'].to_s(@timeformat), 'StatusDate')
       loadUnitsMap = {
-        :minutes => 1,
-        :hours => 2,
-        :days => 3,
-        :weeks => 4,
-        :months => 5,
-        :quarters => 5,
-        :years => 5,
-        :shortAuto => 3,
-        :longAuto => 3
+        :seconds => 1,
+        :minutes => 2,
+        :hours => 3,
+        :days => 4,
+        :weeks => 5,
+        :months => 6,
+        :quarters => 6,
+        :years => 6,
+        :shortAuto => 4,
+        :longAuto => 4
       }
       p << XMLNamedText.new(loadUnitsMap[a('loadUnit')].to_s, 'WorkFormat')
       p << XMLNamedText.new('1', 'NewTasksAreManual')

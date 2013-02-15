@@ -78,7 +78,7 @@ class TaskJuggler
       # Add timingresolution attribute if it's not the default value.
       if @project['scheduleGranularity'] != 3600
         generateAttributeText("timingresolution " +
-                              "#{@project['scheduleGranularity'] / 60}min", 2)
+                              "#{@project['scheduleGranularity'] / 3600}sec", 2)
       end
       generateAttributeText("timezone \"#{@project['timezone']}\"", 2)
       if @project['alertLevels'].modified?

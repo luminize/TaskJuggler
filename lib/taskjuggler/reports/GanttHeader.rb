@@ -69,6 +69,18 @@ class TaskJuggler
       # The 2 header lines are separated by a 1 pixel boundary.
       h = ((@height - 1) / 2).to_i
       case @chart.scale['name']
+      when 'second'
+        genHeaderScale(@largeScale, 0, h, :midnight, :sameTimeNextMinute,
+                       @columnDef.timeformat1 || 'minute %M')
+        ###bijwerken
+        genHeaderScale(@smallScale, h + 1, h, :beginOfSecond, :sameTimeNextSecond,
+                       @columnDef.timeformat2 || '%S')
+      when 'minute'
+        genHeaderScale(@largeScale, 0, h, :midnight, :sameTimeNextHour,
+                       @columnDef.timeformat1 || 'hour %k')
+        ###bijwerken
+        genHeaderScale(@smallScale, h + 1, h, :beginOfMinute, :sameTimeNextMinute,
+                       @columnDef.timeformat2 || '%M')
       when 'hour'
         genHeaderScale(@largeScale, 0, h, :midnight, :sameTimeNextDay,
                        @columnDef.timeformat1 || '%A %Y-%m-%d')
