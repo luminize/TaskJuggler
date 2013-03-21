@@ -26,6 +26,11 @@ This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
 Free Software Foundation.
 
-this is the testenvironmet of Bas
+added by Bas:
+This is the branch which in which you are able to do scheduling in a 
+timingresolution of seconds. With this you could plan a production process
+or something similar in which you need this fine-grained timing.
+Reports have been updated but could need some more work.
+
 EOT
 
