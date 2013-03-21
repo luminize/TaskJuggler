@@ -3,16 +3,21 @@
  * somewhere else and copy it over this file if needed. This file will
  * be overwritten whenever the stylesheet that comes with TaskJuggler
  * has been modified. */
+ @font-face {
+  font-family: eurosti;
+  src: url('Eurosti.TTF');
+}
+
 body {
-  font-family:Bitstream Vera Sans, Tahoma, sans-serif;
-  font-size:15px;
+  font-family: eurosti, Bitstream Vera Sans, Tahoma, sans-serif;
+  font-size:13px;
 }
 h1, h2, table, tr, td, div, span {
 }
 table {
 }
 p {
-  font-size:15px;
+  font-size:13px;
 }
 td, div {
   padding:0px;
@@ -72,15 +77,15 @@ p.tj_journal {
 
 /* The top-level page layout */
 .tj_page {
-  margin: 35px 5% 25px 5%;
+  margin: 35px 25px 25px 25px;
 }
 
 /* The container that holds report tables */
 .tj_table_frame {
-  margin-left:auto;
+/*  margin-left:auto;*/
   margin-right:auto;
   text-align:center;
-  background-color:#9a9a9a;
+  background-color:#aaaaaa; /*#9a9a9a;*/
   margin-top:15px;
   margin-bottom:15px;
   border-spacing:1px;
@@ -96,11 +101,11 @@ p.tj_journal {
   margin:1px;
   text-align:center;
   color:#000000;
-  background-color:#d4dde6; 
+  background-color:#ebeef5; /*#d4dde6; */
 }
 
 .tj_table {
-  background-color:#9a9a9a;
+  background-color:#aaaaaa; /*#9a9a9a;*/
   margin:0px;
   border-spacing:1px;
 }
@@ -110,7 +115,7 @@ p.tj_journal {
   padding:1px 3px 1px 3px;
   white-space:nowrap;
   border-spacing:0px;
-  color:#ffffff;
+  color:#000000; /*#ffffff;*/
   overflow:hidden;
 }
 
@@ -174,7 +179,7 @@ p.tj_journal {
 .tj_table_legend_frame {
   padding:5px;
   margin:1px;
-  background-color:#d4dde6; 
+  background-color:#ebeef5; /*#d4dde6; */
 }
 
 /* The legend of reports with calendar and Gantt charts */
@@ -265,14 +270,14 @@ p.tj_journal {
 }
 
 .tabback {
-  background-color:#9a9a9a;
+  background-color:#aaaaaa; /*#9a9a9a;*/
   overflow:visible;
 }
 .tabfront { background-color:#d4dde6; }
 .tabhead {
   white-space:nowrap;
-  background-color:#7a7a7a;
-  color:#ffffff;
+  background-color:#cccccc; /*#7a7a7a;*/
+  color:#000000; /*#ffffff;*/
   text-align:center;
 }
 .tabhead_offduty {
@@ -312,7 +317,7 @@ p.tj_journal {
   padding:0px;
 }
 .costaccountcell2 {
-  background-color:#ebdfd9;
+  background-color:#f5f8ff; /*#ebf2ff;*/
   white-space:nowrap;
   padding:0px;
 }
@@ -327,7 +332,7 @@ p.tj_journal {
   padding:0px;
 }
 .accountcell1 {
-  background-color:#ebf2ff;
+  background-color:#f5f8ff; /*#ebf2ff;*/
   white-space:nowrap;
   padding:0px;
 }
@@ -337,12 +342,12 @@ p.tj_journal {
   padding:0px;
 }
 .taskcell1 {
-  background-color:#ebf2ff;
+  background-color:#f5f8ff; /*#ebf2ff;*/
   white-space:nowrap;
   padding:0px;
 }
 .taskcell2 {
-  background-color:#d9dfeb;
+  background-color:#ebeef5; /*#d9dfeb;*/
   white-space:nowrap;
   padding:0px;
 }
@@ -390,11 +395,11 @@ p.tj_journal {
   position:absolute;
 }
 .taskbar {
-  background-color:#2f57ea;
+  background-color: #37abc8; /*#37c871; */ /*#2f57ea;*/
   position:absolute;
 }
 .progressbar {
-  background-color:#36363f;
+  background-color: #202020; /*216778; /*#36363f; */
   position:absolute;
 }
 .milestone {
@@ -418,7 +423,7 @@ p.tj_journal {
   position:absolute;
 }
 .offduty {
-  background-color:#bdbdaa;
+  background-color:#cccccc;  /*#7a7a7a;*/   /*#bdbdaa;*/
   white-space:nowrap;
   position:absolute;
 }
@@ -483,4 +488,5 @@ pre[codesection] {
   padding-bottom:0px;
 }
 
-
+div.taskcell1 + div.taskcell1 > div.taskbar { background-color: #ff7f2a } /*#37abc8 }*/ 
+div.taskcell2 + div.taskcell2 > div.taskbar { background-color: #ff7f2a } /*#37abc8 } #ffd42a */
