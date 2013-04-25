@@ -282,7 +282,8 @@ class TaskJuggler
     # _work_ is the effort in man days. The return value is the converted value
     # with optional unit as a String.
     def scaleLoad(value)
-      scaleValue(value, [ @project.dailyWorkingHours * 60,
+      scaleValue(value, [ @project.dailyWorkingHours * 60 * 60,
+                          @project.dailyWorkingHours * 60,
                           @project.dailyWorkingHours,
                           1.0,
                           1.0 / @project.weeklyWorkingDays,
